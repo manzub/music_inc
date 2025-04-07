@@ -1,0 +1,39 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+bzip2=1.0.8=h6c40b1e_6
+ca-certificates=2025.2.25=hecd8cb5_0
+certifi=2025.1.31=pypi_0
+charset-normalizer=3.4.1=pypi_0
+docopt=0.6.2=pypi_0
+expat=2.6.4=h6d0c2b6_0
+greenlet=3.1.1=pypi_0
+idna=3.10=pypi_0
+libcxx=14.0.6=h9765a3e_0
+libffi=3.4.4=hecd8cb5_1
+libmpdec=4.0.0=h46256e1_0
+markdown-it-py=3.0.0=pypi_0
+mdurl=0.1.2=pypi_0
+ncurses=6.4=hcec6c5f_0
+openssl=3.0.16=h184c1cd_0
+pip=25.0=py313hecd8cb5_0
+pipreqs=0.4.13=pypi_0
+psycopg2=2.9.10=pypi_0
+pygments=2.19.1=pypi_0
+python=3.13.2=h1ec50cd_100_cp313
+python-dotenv=1.0.1=pypi_0
+python_abi=3.13=0_cp313
+readline=8.2=hca72f7f_0
+requests=2.32.3=pypi_0
+rich=13.9.4=pypi_0
+setuptools=75.8.0=py313hecd8cb5_0
+sqlalchemy=2.0.38=pypi_0
+sqlite=3.45.3=h6c40b1e_0
+tk=8.6.14=h4d00af3_0
+typing-extensions=4.12.2=pypi_0
+tzdata=2025a=h04d1e81_0
+urllib3=2.3.0=pypi_0
+wheel=0.45.1=py313hecd8cb5_0
+xz=5.6.4=h46256e1_1
+yarg=0.1.10=pypi_0
+zlib=1.2.13=h4b97444_1
