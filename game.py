@@ -13,3 +13,10 @@ from services.staff_service import sign_manager
 # create a new session
 session = SessionLocal()
 console = Console()
+
+# start game
+def game():
+  pass
+
+if __name__ == '__main__':
+  game()
