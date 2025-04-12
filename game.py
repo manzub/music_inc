@@ -8,6 +8,8 @@ from app.models.label import Label
 from app.models.staff import Staff
 from app.services.label_service import create_label
 from app.services.staff_service import sign_manager
+from app.cli.label_ui import create_label, load_label
+from app.cli.menu import main_menu
 
 # start console
 # create a new session
@@ -24,11 +26,11 @@ def game():
   choice = Prompt.ask("\nChoose an option", choices=["1", "2", "3"])
 
   if choice == "1":
-    from app.cli.label_ui import create_label
     create_label()
   elif choice == "2":
     console.print("[yellow]🔄 Loading game...[/yellow]")
-    # fetch user id and load game
+    label = load_label(session)
+    main_menu(label, True)
   else:
     console.print("[red]👋 Exiting... Goodbye![/red]")
     exit()
