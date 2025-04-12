@@ -1,6 +1,6 @@
 # 📝 Pull Request Template
 
-Thank you for contributing to **Music Inc Simulator**! Please review and complete the checklist below before submitting your pull request.
+Thank you for contributing to **Music Inc**! Please review and complete the checklist below before submitting your pull request.
 
 ---
 
@@ -21,12 +21,6 @@ Thank you for contributing to **Music Inc Simulator**! Please review and complet
 - [ ] 🔧 Refactor (no functional change)
 - [ ] 📚 Documentation update
 - [ ] ⚙️ DevOps / tool config
-
----
-
-## 📸 Screenshots or CLI Output (if applicable)
-
-> Add screenshots or paste CLI examples to demonstrate your changes if it's UI or logic related.
 
 ---
 
