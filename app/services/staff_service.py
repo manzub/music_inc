@@ -1,8 +1,8 @@
 from rich.console import Console
 from rich.prompt import Prompt
 from sqlalchemy.orm import Session
-from models.staff import Staff
-from models.label import Label
+from app.models.staff import Staff
+from app.models.label import Label
 
 def scout_staffs(session: Session, role: str):
   # search staffs in database

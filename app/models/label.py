@@ -1,4 +1,4 @@
-from config.config import Base
+from app.config.config import Base
 from sqlalchemy import Column, String, Integer, DateTime, func
 
 def fetch_label(owner):

@@ -2,9 +2,9 @@ import random
 from datetime import datetime
 from rich.prompt import Prompt
 from sqlalchemy.orm import Session
-from models.artist import Artist
-from models.releases import Releases
-from models.decision_history import ArtistDecisionHistory
+from app.models.artist import Artist
+from app.models.releases import Releases
+from app.models.decision_history import ArtistDecisionHistory
 
 def generate_artist_name():
   prefixes = ["Lil", "Big", "Young", "DJ", "MC", "King", "Queen", "Dr.", "Sir", "Prof."]
@@ -23,7 +23,7 @@ def generate_artist_name():
   else:
     return f"{random.choice(prefixes)} {random.choice(real_names)}"
 
-def generate_artists_random(session:Session, count: int, callback: function = None):
+def generate_artists_random(session:Session, count: int, callback  = None):
   count = count if count else random.randint(1, 5)
   # generate random artists with different personalities
   for x in range(count):

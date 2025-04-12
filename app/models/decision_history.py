@@ -1,4 +1,4 @@
-from config.config import Base
+from app.config.config import Base
 from sqlalchemy import Column, Integer, JSON, DateTime, ForeignKey, String
 from datetime import datetime
 
