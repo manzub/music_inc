@@ -1,3 +1,5 @@
+import random
+import string
 from app.config.config import Base
 from sqlalchemy import Column, String, Integer, DateTime, func
 
@@ -19,10 +21,14 @@ class Label(Base):
   created_at = Column(DateTime, default=func.now())
   updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
-  def __init__(self, name: str, user: str, budget: int):
+  def __init__(self, name: str, user: str, budget: int, level = None, status = None):
     self.name = name
-    self.user = user
+    self.user = self.create_userid()
     self.budget = budget
-
-  def check_userid(self, userid):
-    return userid == self.user
+    self.level = level
+    self.status = status
+  
+  def create_userid(self):
+    characters = string.ascii_letters + string.digits
+    userid = ''.join(random.choice(characters) for _ in range(random.randint(6, 9)))
+    return userid
