@@ -1,8 +1,8 @@
 import random
 from sqlalchemy.orm import Session
-from services.artist_service import generate_artists_random
-from models.label import Label
-from models.artist import Artist
+from app.services.artist_service import generate_artists_random
+from app.models.label import Label
+from app.models.artist import Artist
 
 def check_record_name(session: Session, name: str):
   check_label = session.query(Label).filter_by(name=name).first()

@@ -1,8 +1,8 @@
 import random
 import numpy as np
 import pandas as pd
-from models.decision_history import ArtistDecisionHistory
-from config.config import Base
+from app.models.decision_history import ArtistDecisionHistory
+from app.config.config import Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON, DateTime
 from sqlalchemy.orm import relationship, Session
 from sklearn.tree import DecisionTreeClassifier

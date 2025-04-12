@@ -1,11 +1,11 @@
-from models.label import Label
-from models.artist import Artist
-from models.staff import Staff
-from models.releases import Releases
-from models.decision_history import ArtistDecisionHistory
-from config.config import engine, Base, SessionLocal
-from services.staff_service import add_staff
-from services.artist_service import save_decision, generate_artist_name
+from app.models.label import Label
+from app.models.artist import Artist
+from app.models.staff import Staff
+from app.models.releases import Releases
+from app.models.decision_history import ArtistDecisionHistory
+from app.config.config import engine, Base, SessionLocal
+from app.services.staff_service import add_staff
+from app.services.artist_service import save_decision, generate_artist_name
 
 session = SessionLocal()
 
