@@ -1,13 +1,7 @@
-import random
-import string
 from app.config.config import SessionLocal
 from rich.console import Console
-from rich.table import Table
 from rich.prompt import Prompt
-from app.models.label import Label
-from app.models.staff import Staff
-from app.services.label_service import create_label
-from app.services.staff_service import sign_manager
+from app.models import Label, Staff
 from app.cli.label_ui import create_label, load_label
 from app.cli.menu import main_menu
 
@@ -26,7 +20,8 @@ def game():
   choice = Prompt.ask("\nChoose an option", choices=["1", "2", "3"])
 
   if choice == "1":
-    create_label()
+    label = create_label(session=session)
+    main_menu(label, False)
   elif choice == "2":
     console.print("[yellow]🔄 Loading game...[/yellow]")
     label = load_label(session)

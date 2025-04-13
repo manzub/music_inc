@@ -5,6 +5,13 @@ from sqlalchemy.ext.declarative import declarative_base
 SQLALCHEMY_DATABASE_URI = "postgresql://postgres:Jeddac401@localhost:5437/musicincapp"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+MANAGERS = [
+  {"name": "Mom", "salary": 0, "effect": "Reduces artist signing cost"},
+  {"name": "Ashley Stone", "salary": 5000, "effect": "Reduces artist signing cost"},
+  {"name": "Marcus Lee", "salary": 3000, "effect": "Faster release schedule"},
+  {"name": "Riley West", "salary": 1000, "effect": "Basic starter manager"},
+]
+
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
