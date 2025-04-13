@@ -47,4 +47,3 @@ def release_music(session: Session, artist: Artist, release_type: str, featured:
     new_release = Releases(artist=artist.id, release_type=release_type, featured=featured, genre=genre)
     session.add(new_release)
     session.commit()
-  pass

@@ -12,6 +12,7 @@ class Label(Base):
   id = Column(Integer, primary_key=True, index=True)
   name = Column(String, unique=True, nullable=False)
   user = Column(String, unique=True, nullable=False)
+  manager = Column(String, default=None)
   budget = Column(Integer, default=0)
   level = Column(Integer, default=1)
   # status conditions 0 = bankrupt, 1 = active,
@@ -21,10 +22,11 @@ class Label(Base):
   created_at = Column(DateTime, default=func.now())
   updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
-  def __init__(self, name: str, user: str, budget: int, level = None, status = None):
+  def __init__(self, name: str, user: str, budget: int, manager:str = None, level = None, status = None):
     self.name = name
     self.user = self.create_userid()
     self.budget = budget
+    self.manager = manager
     self.level = level
     self.status = status
   

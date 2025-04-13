@@ -1,24 +1,22 @@
-from app.models.label import Label
-from app.models.artist import Artist
-from app.models.staff import Staff
-from app.models.releases import Releases
-from app.models.decision_history import ArtistDecisionHistory
+import pytest
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from app.models import Label, Staff, Artist, Releases, ArtistDecisionHistory
 from app.config.config import engine, Base, SessionLocal
-from app.services.staff_service import add_staff
-from app.services.artist_service import save_decision, generate_artist_name
+from app.services.artist_service import save_decision, generate_artist_name, create_artist
 
 session = SessionLocal()
 
 def setup_staffs():
-  add_staff(session=session, name="Mom", role="manager", salary=0)
-  add_staff(session=session, name="Neighbourhood Admin", role="manager", salary=2000)
-  add_staff(session=session, name="Chris", role="manager", salary=5000)
-
   # setup artists
-  add_artist(session=session, name="Jenne", genre="rnb", popularity=3.5)
-  add_artist(session=session, name="Mark", genre="hip-hop", popularity=5.5)
-  add_artist(session=session, name="sade", genre="afrobeats", popularity=1.5)
+  create_artist(session=session, name=generate_artist_name())
+  create_artist(session=session, name=generate_artist_name())
+  create_artist(session=session, name=generate_artist_name())
 
+# @pytest.fixture()
 def init_db():
   print("🔄 Initializing database...")  # Debugging log
   try:
@@ -29,7 +27,7 @@ def init_db():
 
 if __name__ == '__main__':
   # init_db()
-  # setup_staffs()
+  setup_staffs()
   artist = Artist(name=generate_artist_name(), popularity=3.6)
   session.add(artist)
   session.commit()

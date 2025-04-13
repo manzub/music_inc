@@ -8,13 +8,12 @@ def check_record_name(session: Session, name: str):
   check_label = session.query(Label).filter_by(name=name).first()
   if check_label is None:
     return name
-  else:
-    check_record_name(session=session)
+  return False
 
-def create_label(session: Session, name: str, userid: str):
+def create_label_db(session: Session, name: str, userid: str):
   name = check_record_name(session, name)
   # random budget
-  budget = random.choice([5000, 10000, 15000])
+  budget = random.choice([5000, 8000, 10000])
   label = Label(name=name, user=userid, budget=budget)
   session.add(label)
   session.commit()
