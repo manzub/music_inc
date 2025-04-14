@@ -12,6 +12,11 @@ MANAGERS = [
   {"name": "Riley West", "salary": 1000, "effect": "Basic starter manager"},
 ]
 
+LEVELS = [
+  {"name": "Moms Garage", "price": 0, "artists": 1},
+  {"name": "Small Office", "price": 50000, "artists": 2}
+]
+
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
