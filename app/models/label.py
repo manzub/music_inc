@@ -14,7 +14,8 @@ class Label(Base):
   user = Column(String, unique=True, nullable=False)
   manager = Column(String, default=None)
   budget = Column(Integer, default=0)
-  level = Column(Integer, default=1)
+  level = Column(Integer, default=0)
+  # TODO: signed artists list
   # status conditions 0 = bankrupt, 1 = active,
   status = Column(Integer, default=1)
 
@@ -22,9 +23,9 @@ class Label(Base):
   created_at = Column(DateTime, default=func.now())
   updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
-  def __init__(self, name: str, user: str, budget: int, manager:str = None, level = None, status = None):
+  def __init__(self, name: str, user: str, budget: int, manager:str = None, level:int = None, status:int = None):
     self.name = name
-    self.user = self.create_userid()
+    self.user = user if user else self.create_userid()
     self.budget = budget
     self.manager = manager
     self.level = level
@@ -32,5 +33,5 @@ class Label(Base):
   
   def create_userid(self):
     characters = string.ascii_letters + string.digits
-    userid = ''.join(random.choice(characters) for _ in range(random.randint(6, 9)))
+    userid = ''.join(random.choice(characters) for _ in range(random.randint(4, 6)))
     return userid
