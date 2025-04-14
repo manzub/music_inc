@@ -69,7 +69,7 @@ music-inc-sim/
 ├── tests/                # Unit tests
 ├── alembic/              # Migrations
 ├── .env.example
-├── main.py               # Game entry point
+├── game.py               # Game entry point
 ├── requirements.txt
 ├── README.md
 
