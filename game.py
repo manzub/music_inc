@@ -25,7 +25,8 @@ def game():
   elif choice == "2":
     console.print("[yellow]🔄 Loading game...[/yellow]")
     label = load_label(session)
-    main_menu(session, label, True)
+    if label is not None:
+      main_menu(session, label, True)
   else:
     console.print("[red]👋 Exiting... Goodbye![/red]")
     exit()

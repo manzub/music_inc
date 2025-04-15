@@ -31,8 +31,8 @@ def generate_artists_random(session:Session, count: int, callback  = None):
   if callback:
     callback(session)
 
-def create_artist(session: Session, name: str):
-  new_artist = Artist(name)
+def create_artist(session: Session, name: str, fee: int):
+  new_artist = Artist(name, fee=fee)
   session.add(new_artist)
   session.commit()
 

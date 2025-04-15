@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from rich.console import Console
 from rich.prompt import Prompt
 from app.models.label import Label
-from app.cli.label_ui import manage_label
+from app.cli.label_ui import manage_label, scout_sign_artist
 
 console = Console()
 
@@ -24,8 +24,14 @@ def main_menu(session: Session, label: Label,  existing = False):
     choice = Prompt.ask("\nChoose an action", choices=["1", "2", "3", "4", "5"])
 
     if choice == "1":
-      # check label level
-      # sign new artist, fetch all artists from DB
+      scout_sign_artist(session=session, label=label)
+    elif choice == "2":
+      # TODO: manage signed artists
+      # release music, manage contracts, manage fans, tour
+      pass
+    elif choice == "3":
+      # TODO: check news & social feed
+      # manage paparazo, gossip about signed artists, rivals
       pass
     elif choice == "4":
       manage_label(session, label)
