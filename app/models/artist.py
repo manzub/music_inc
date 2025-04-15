@@ -21,6 +21,8 @@ class Artist(Base):
   popularity = Column(Float, default=1.0)
   signed_date = Column(DateTime, default=datetime.now())
   label_id = Column(Integer, ForeignKey("record_labels.id"))
+  # TODO: signing fee
+  signing_fee = Column(Integer, nullable=False)
 
   personality = Column(JSON, default={})
 
@@ -28,11 +30,12 @@ class Artist(Base):
   decisions = relationship("ArtistDecisionHistory", backref="artists")
   releases =  relationship("Releases", backref="artists")
 
-  def __init__(self, name: str, genre: str = None, popularity: float = None, personality: dict = None):
+  def __init__(self, name: str, genre: str = None, popularity: float = None, personality: dict = None, fee: int = None):
     self.name = name
     self.genre = genre if genre else self.generate_genre()
     self.popularity = popularity if popularity else random.randint(1,3)
     self.personality = personality if personality else self.generate_personality()
+    self.signing_fee = fee
     self.model = None
 
   def generate_genre(self):

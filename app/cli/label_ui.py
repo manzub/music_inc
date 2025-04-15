@@ -1,12 +1,13 @@
 from sqlalchemy.orm import Session
 from rich.console import Console
 from rich.prompt import Prompt, Confirm
-from app.models import Label, Staff
+from app.models import Label, Artist
 from app.config.config import MANAGERS, LEVELS
 from app.services.label_service import check_record_name, create_label_db
 
 console = Console()
 
+# misc re-usable function to select manager loop
 def select_manager(label: Label):
   console.print("\n🧑‍💼 [bold]Choose a Manager:[/bold]")
   for idx, manager in enumerate(MANAGERS, start=1):
@@ -35,19 +36,22 @@ def create_label_func(session: Session):
     session.commit()
 
     console.print(f"\n🏷️ Created Record Label: [bold magenta]{label.name}[/bold magenta] with ${remaining_budget} and manager [bold]{selected_manager['name']}[/bold]")
+    console.print(f"Your User ID is {label.user} You will need this to login")
 
     return label
   else:
     console.print("[red]That Record Name already exists.. try again[red]")
     create_label_func(session=session)
 
+# create label ui function
 def create_label(session: Session):
   console.print("\n\nI see you want to start a record label, do you have what it takes?")
   console.print("Manage Artsits, Paparazzo, Scandals and all the drama involved!")
   console.print("See you at the top!...\n\n")
-  create_label_func(session=session)
+  return create_label_func(session=session) # create label game logic
   
 
+# load label from DB and initialise saved modules
 def load_label(session: Session):
   userid = Prompt.ask("[cyan]Enter your userid... [cyan]")
   
@@ -55,7 +59,7 @@ def load_label(session: Session):
     found = session.query(Label).filter_by(user=userid).first()
     if not found:
       console.print(f"[red]User ID - {userid} not found!... try again[red]")
-      load_label(session)
+      return None
     
     console.print(f"Found ${found.name} ⭐️✨")
     label = Label(name=found.name, user=userid, budget=found.budget, manager=found.manager, level=found.level, status=found.status)
@@ -98,7 +102,7 @@ def manage_label(session: Session, label: Label):
   elif choice == "2":
     console.print("\n[bold green]⚖️ Lawyer Management[/bold green]")
     console.print("This feature is under development.")
-    # TODO: handle contract disputes or negotiations
+    # TODO: sign a lawyer **NEEDED** to negotiate with artists
   elif choice == "3":
     console.print("\n[bold green]🏢 Office[/bold green]")
     console.print(f"Current office is: {LEVELS[label.level]['name']}.")
@@ -119,3 +123,46 @@ def manage_label(session: Session, label: Label):
   # Loop again after action
   if Confirm.ask("\nDo you want to continue managing the label?"):
       manage_label(session, label)
+
+def scout_sign_artist(session: Session, label: Label):
+  # scout artist
+  signed_count = len(label.signed_artists) if label.signed_artists else 0
+  can_sign_artist = LEVELS[label.level]["artists"] > signed_count
+  if can_sign_artist: # can sign new artist
+    artists = session.query(Artist).all()
+    console.print("\n🧑‍💼 [bold]Choose an Artist:[/bold]")
+
+    signed_artists = label.signed_artists or []
+    available_artists = [a for a in artists if a.id not in signed_artists]
+    if not available_artists:
+      console.print("[red]No unsigned artists available.[/red]")
+      return None
+
+    for idx, artist in enumerate(available_artists, start=1):
+      traits = artist.personality.keys()
+      traits_str = ", ".join(traits).replace("_", " ").title()
+      console.print(f"{idx}. {artist.name}[Fee: {artist.signing_fee}] - Genre: ({artist.genre}/{artist.popularity}) - Personality: {traits_str}")
+    console.print("Q. Exit")
+
+    valid_choices = [str(i) for i in range(1, len(available_artists)+1)] + ["q"]
+    choice = Prompt.ask("Pick an artist", choices=valid_choices)
+
+    if choice.lower() == "q":
+      return None
+    
+    selected_artist = available_artists[int(choice) - 1]
+
+    # sign artist
+    if label.budget > selected_artist.signing_fee:
+      label.budget -= selected_artist.signing_fee
+      if not label.signed_artists:
+        label.signed_artists = []
+      label.signed_artists.append(selected_artist.id)
+      session.commit()
+
+      console.print(f"\n\n[green]✅ Signed Artist: {selected_artist.name}!🎉🎉🎉[green]")
+    else:
+      console.print(f"[red]❌ Insufficient funds to sign this artist. Balance is: {label.budget}[red]")
+      return None
+  else:
+    console.print("[yellow]Already signed MAX allowed artists. looks like we need a bigger office!😮[yellow]")

@@ -1,7 +1,7 @@
 import random
 import string
 from app.config.config import Base
-from sqlalchemy import Column, String, Integer, DateTime, func
+from sqlalchemy import Column, String, Integer, DateTime, JSON, func
 
 def fetch_label(owner):
   return Label.query.get(owner)
@@ -15,7 +15,7 @@ class Label(Base):
   manager = Column(String, default=None)
   budget = Column(Integer, default=0)
   level = Column(Integer, default=0)
-  # TODO: signed artists list
+  signed_artists = Column(JSON, default=[])
   # status conditions 0 = bankrupt, 1 = active,
   status = Column(Integer, default=1)
 
