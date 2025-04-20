@@ -1,23 +1,23 @@
 from sqlalchemy.orm import Session
 from rich.console import Console
 from rich.prompt import Prompt, Confirm
-from app.models import Label, Artist
+from app.models import Label, Artist, Staff
 from app.config.config import MANAGERS, LEVELS
 from app.services.label_service import check_record_name, create_label_db
 
 console = Console()
 
 # misc re-usable function to select manager loop
-def select_manager(label: Label):
+def select_manager(label: Label, managers: list[Staff]):
   console.print("\n🧑‍💼 [bold]Choose a Manager:[/bold]")
-  for idx, manager in enumerate(MANAGERS, start=1):
-    if label.manager is not manager["name"]:
-      console.print(f"{idx}. {manager['name']} ({manager['salary']}) - {manager['effect']}")
+  for idx, manager in enumerate(managers, start=1):
+    if label.manager is not manager.name:
+      console.print(f"{idx}. {manager.name} ({manager.salary}) - {manager.effect}")
   console.print("Q. Exit")
 
-  choice = Prompt.ask("Pick your manager", choices=[str(i) for i in range(1, len(MANAGERS)+1)]+["q"])
-  selected_manager = MANAGERS[int(choice) - 1] if choice.isnumeric() else None
-  return selected_manager
+  choice = Prompt.ask("Pick your manager", choices=[str(i) for i in range(1, managers.count()+1)]+["q"])
+  selected_manager = managers[int(choice) - 1] if choice.isnumeric() else None
+  return selected_manager.to_dict()
 
 def create_label_func(session: Session):
   name = Prompt.ask("[cyan]Enter your label name to begin... [cyan]")
@@ -27,7 +27,8 @@ def create_label_func(session: Session):
     console.print(f"\n💰 Your starting budget is: [bold cyan]${label.budget}[/bold cyan]")
 
     # select managers
-    selected_manager =  select_manager(label=label)
+    managers = session.query(Staff).filter_by(role="manager")
+    selected_manager =  select_manager(label=label, managers=managers)
     console.print(f"Signed Manager: {selected_manager['name']}")
 
     remaining_budget = label.budget - selected_manager["salary"]
@@ -91,7 +92,8 @@ def manage_label(session: Session, label: Label):
     else:
       console.print("No manager assigned.")
     if Confirm.ask("Would you like to hire a manager?"):
-      selected_manager = select_manager(label)
+      managers = session.query(Staff).filter_by(role="manager")
+      selected_manager = select_manager(label, managers)
       if selected_manager is None:
         return
       if label.budget > selected_manager["salary"]:
