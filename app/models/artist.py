@@ -38,6 +38,16 @@ class Artist(Base):
     self.signing_fee = fee
     self.model = None
 
+  def to_dict(self):
+    return {
+      "id": self.id,
+      "name": self.name,
+      "genre": self.genre,
+      "popularity": self.popularity,
+      "personality": self.personality,
+      "signing_fee": self.signing_fee
+    }
+
   def generate_genre(self):
     genres = ["hiphop", "randb", "country", "pop", "afrobeats", "jazz"]
     genre = random.choice(genres)
