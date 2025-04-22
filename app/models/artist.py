@@ -1,9 +1,6 @@
 import random
 import pandas as pd
-from app.models.decision_history import ArtistDecisionHistory
-from app.config.config import Base
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON, DateTime
-from sqlalchemy.orm import relationship, Session
+from pymongo.collection import Collection
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import LabelEncoder
 from datetime import datetime
@@ -43,27 +40,29 @@ class ArtistModel():
     # save_decision
     return decision
   
-  def train_model(self, session: Session):
-    decisions = session.query(ArtistDecisionHistory).filter_by(artist_id=self.id).all()
-    if len(decisions) < 5:  # Need at least 5 data points to train
-      return
-    
-    # prepare dataframe
-    df = pd.DataFrame([(d.personality, d.decision) for d in decisions], columns=["personality", "decision"])
-    df["personality"] = df["personality"].apply(eval)  # Convert string to dict
-    df = df.join(pd.json_normalize(df["personality"])).drop(columns=["personality"])
+  def train_model(self, collection: Collection):
+    artist = collection.find_one({"name":self.name})
+    if artist:
+      decisions = artist.get("decision_history", [])
+      if len(decisions) < 5:  # Need at least 5 data points to train
+        return
+      
+      # prepare dataframe
+      df = pd.DataFrame([(d.personality, d.decision) for d in decisions], columns=["personality", "decision"])
+      df["personality"] = df["personality"].apply(eval)  # Convert string to dict
+      df = df.join(pd.json_normalize(df["personality"])).drop(columns=["personality"])
 
-    # Encode decision labels
-    label_encoder = LabelEncoder()
-    df["decision"] = label_encoder.fit_transform(df["decision"])
+      # Encode decision labels
+      label_encoder = LabelEncoder()
+      df["decision"] = label_encoder.fit_transform(df["decision"])
 
-    # Train Decision Tree model
-    X = df.drop(columns=["decision"])
-    y = df["decision"]
-    model = DecisionTreeClassifier()
-    model.fit(X, y)
+      # Train Decision Tree model
+      X = df.drop(columns=["decision"])
+      y = df["decision"]
+      model = DecisionTreeClassifier()
+      model.fit(X, y)
 
-    self.model = model  # Save trained model
+      self.model = model  # Save trained model
 
   def to_dict(self):
     return {

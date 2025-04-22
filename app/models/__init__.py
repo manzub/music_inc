@@ -3,8 +3,6 @@ from app.config.config import MONGODB_CONNECTION_STRING
 
 from .label import Label
 from .artist import ArtistModel
-from .decision_history import ArtistDecisionHistory
-from .staff import Staff
 from .releases import Releases
 
 client = MongoClient(MONGODB_CONNECTION_STRING)
