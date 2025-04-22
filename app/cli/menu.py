@@ -3,6 +3,7 @@ from rich.console import Console
 from rich.prompt import Prompt
 from app.models.label import Label
 from app.cli.label_ui import manage_label, scout_sign_artist
+from app.cli.artist_ui import select_artist_menu, manage_artist
 
 console = Console()
 
@@ -28,7 +29,8 @@ def main_menu(session: Session, label: Label,  existing = False):
     elif choice == "2":
       # TODO: manage signed artists
       # release music, manage contracts, manage fans, tour
-      pass
+      artist = select_artist_menu(session=session, label=label)
+      manage_artist(artist=artist, session=session)
     elif choice == "3":
       # TODO: check news & social feed
       # manage paparazo, gossip about signed artists, rivals

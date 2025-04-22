@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from rich.console import Console
 from rich.prompt import Prompt, Confirm
 from app.models import Label, Artist, Staff
-from app.config.config import MANAGERS, LEVELS
+from app.config.config import LEVELS
 from app.services.label_service import check_record_name, create_label_db
 
 console = Console()

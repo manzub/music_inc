@@ -1,10 +1,7 @@
 import random
 from datetime import datetime
-from rich.prompt import Prompt
-from sqlalchemy.orm import Session
-from app.models.artist import Artist
-from app.models.releases import Releases
-from app.models.decision_history import ArtistDecisionHistory
+from pymongo.collection import Collection
+from app.models.artist import ArtistModel
 
 def generate_artist_name():
   prefixes = ["Lil", "Big", "Young", "DJ", "MC", "King", "Queen", "Dr.", "Sir", "Prof."]
@@ -23,27 +20,28 @@ def generate_artist_name():
   else:
     return f"{random.choice(prefixes)} {random.choice(real_names)}"
 
-def generate_artists_random(session:Session, count: int, callback  = None):
+def generate_artists_random(collection: Collection, count: int, callback  = None):
   count = count if count else random.randint(1, 5)
   # generate random artists with different personalities
   for x in range(count):
-    create_artist(session, generate_artist_name())
+    create_artist(collection, generate_artist_name())
   if callback:
-    callback(session)
+    callback(collection)
 
-def create_artist(session: Session, name: str, fee: int):
-  new_artist = Artist(name, fee=fee)
-  session.add(new_artist)
-  session.commit()
+def create_artist(collection: Collection, name: str, fee: int):
+  new_artist = ArtistModel(name, fee=fee if fee else random.randint(1000, 10000))
+  collection.insert_one(new_artist)
 
-def save_decision(session: Session, artist: Artist, decision: int):
-  new_decision = ArtistDecisionHistory(artist_id=1, personality=artist.personality, decision=decision)
-  session.add(new_decision)
-  session.commit()
+def save_decision(collection: Collection, artist: ArtistModel, decision: int, event: str = "negotiation"):
+  new_decision = {"event": event, "decision": decision, "timestamp": datetime.utcnow()}
+  artist.decision_history.append(new_decision)
+  update = {"$set": {"decision_history": artist.decision_history}}
+  collection.update_one({"name": artist.name}, update)
 
-def release_music(session: Session, artist: Artist, release_type: str, featured: int, genre: str,):
+def release_music(collection: Collection, artist: ArtistModel, release_type: str, featured: int, genre: str,):
   # releases - id, type[albuim,single], featured[artist,none], genre, sales
-  if release_type in ["album", "single"]:
-    new_release = Releases(artist=artist.id, release_type=release_type, featured=featured, genre=genre)
-    session.add(new_release)
-    session.commit()
+  # if release_type in ["album", "single"]:
+  #   new_release = Releases(artist=artist.id, release_type=release_type, featured=featured, genre=genre)
+  #   session.add(new_release)
+  #   session.commit()
+  pass

@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+MONGODB_CONNECTION_STRING = "mongodb://localhost:27017"
 SQLALCHEMY_DATABASE_URI = "postgresql://postgres:Jeddac401@localhost:5437/musicincapp"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 

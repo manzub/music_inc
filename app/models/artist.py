@@ -1,5 +1,4 @@
 import random
-import numpy as np
 import pandas as pd
 from app.models.decision_history import ArtistDecisionHistory
 from app.config.config import Base
@@ -12,41 +11,17 @@ from datetime import datetime
 # personalised artist that can make decisions and negotiations
 # each artist has a personality that affects choice
 # send choice options - 1 (good), 2 (neutral), 3 (bad/negative) based on personality traits artist will select random choice
-class Artist(Base):
-  __tablename__ = "artists"
-
-  id = Column(Integer, primary_key=True, index=True)
-  name = Column(String, unique=True, nullable=False)
-  genre = Column(String, nullable=False)
-  popularity = Column(Float, default=1.0)
-  signed_date = Column(DateTime, default=datetime.now())
-  label_id = Column(Integer, ForeignKey("record_labels.id"))
-  # TODO: signing fee
-  signing_fee = Column(Integer, nullable=False)
-
-  personality = Column(JSON, default={})
-
-  label = relationship("Label", backref="artists")
-  decisions = relationship("ArtistDecisionHistory", backref="artists")
-  releases =  relationship("Releases", backref="artists")
-
-  def __init__(self, name: str, genre: str = None, popularity: float = None, personality: dict = None, fee: int = None):
+class ArtistModel():
+  def __init__(self, name: str, genre: str = None, popularity: float = None, personality: dict = None, fee: int = None, label_id = None):
     self.name = name
     self.genre = genre if genre else self.generate_genre()
-    self.popularity = popularity if popularity else random.randint(1,3)
+    self.popularity = popularity if popularity else round(random.uniform(1.0, 3.0), 1)
+    self.signed_date = datetime.utcnow()
+    self.label_id = label_id
     self.personality = personality if personality else self.generate_personality()
-    self.signing_fee = fee
+    self.decision_history = []
+    self.signing_fee = fee if fee else random.randint(1000, 10000)
     self.model = None
-
-  def to_dict(self):
-    return {
-      "id": self.id,
-      "name": self.name,
-      "genre": self.genre,
-      "popularity": self.popularity,
-      "personality": self.personality,
-      "signing_fee": self.signing_fee
-    }
 
   def generate_genre(self):
     genres = ["hiphop", "randb", "country", "pop", "afrobeats", "jazz"]
@@ -89,4 +64,16 @@ class Artist(Base):
     model.fit(X, y)
 
     self.model = model  # Save trained model
+
+  def to_dict(self):
+    return {
+      "name": self.name,
+      "genre": self.genre,
+      "popularity": self.popularity,
+      "signed_date": self.signed_date,
+      "label_id": self.label_id,
+      "personality": self.personality,
+      "decision_history": self.decision_history,
+      "signing_fee": self.signing_fee
+    }
   
