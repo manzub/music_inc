@@ -28,23 +28,24 @@ def select_artist_menu(label: Label):
   return selected_artist
 
 def manage_artist(artist: ArtistModel):
-  console.print(f"\n[bold green]🎤 Managing Artist: {artist.name}[/bold green]")
-  console.print("1. Release Music")
-  console.print("2. Manage Contracts")
-  console.print("3. Fans & Tour")
-  console.print("Q. Go Back")
+  if artist:
+    console.print(f"\n[bold green]🎤 Managing Artist: {artist.name}[/bold green]")
+    console.print("1. Release Music")
+    console.print("2. Manage Contracts")
+    console.print("3. Fans & Tour")
+    console.print("Q. Go Back")
 
-  choice = Prompt.ask("\nChoose an action", choices=["1", "2", "3", "q"], default="q").lower()
-  if choice == "1":
-    release_music(artist)
-  elif choice == "2":
-    # manage_contracts(session, artist)
-    pass
-  elif choice == "3":
-    # manage_fans(session, artist)
-    pass
-  elif choice == "q":
-    return None
+    choice = Prompt.ask("\nChoose an action", choices=["1", "2", "3", "q"], default="q").lower()
+    if choice == "1":
+      release_music(artist)
+    elif choice == "2":
+      # manage_contracts(session, artist)
+      pass
+    elif choice == "3":
+      # manage_fans(session, artist)
+      pass
+    elif choice == "q":
+      return None
   
 
 def release_music(artist: ArtistModel):
