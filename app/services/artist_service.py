@@ -24,13 +24,16 @@ def generate_artists_random(collection: Collection, count: int, callback  = None
   count = count if count else random.randint(1, 5)
   # generate random artists with different personalities
   for x in range(count):
-    create_artist(collection, generate_artist_name())
+    create_artist(collection=collection, name=generate_artist_name())
   if callback:
     callback(collection)
 
-def create_artist(collection: Collection, name: str, fee: int):
-  new_artist = ArtistModel(name, fee=fee if fee else random.randint(1000, 10000))
-  collection.insert_one(new_artist)
+def create_artist(collection: Collection, name: str, fee: int = None):
+  try:
+    new_artist = ArtistModel(name, fee=fee if fee else random.randint(1000, 10000))
+    collection.insert_one(new_artist.to_dict())
+  except:
+    print(f"Artist '{new_artist.name}' already exists. Skipping...")
 
 def save_decision(collection: Collection, artist: ArtistModel, decision: int, event: str = "negotiation"):
   new_decision = {"event": event, "decision": decision, "timestamp": datetime.utcnow()}
