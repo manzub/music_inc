@@ -2,11 +2,10 @@ import pytest
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from app.models import Artist
-from app.services import artist_service
+from app.models import artists_collection
+from app.services.artist_service import generate_artists_random
 
-
+    
 
 if __name__ == "__main__":
-  artist = Artist(artist_service.generate_artist_name())
-  print(dict(artist))
+  generate_artists_random(artists_collection, 2)

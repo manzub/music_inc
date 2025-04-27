@@ -155,15 +155,15 @@ def scout_sign_artist(label: Label):
     selected_artist = available_artists[int(choice) - 1]
 
     # sign artist
-    if label.budget > selected_artist.signing_fee:
-      label.budget -= selected_artist.signing_fee
+    if label.budget > selected_artist['signing_fee']:
+      label.budget -= selected_artist['signing_fee']
       if not label.signed_artists:
         label.signed_artists = []
-      label.signed_artists.append(selected_artist.id)
+      label.signed_artists.append(selected_artist['_id'])
       # update DB signed_artists and budget
       labels_collection.update_one({"user":label.user}, {"$set": {"budget": label.budget, "signed_artists": label.signed_artists}})
 
-      console.print(f"\n\n[green]✅ Signed Artist: {selected_artist.name}!🎉🎉🎉[green]")
+      console.print(f"\n\n[green]✅ Signed Artist: {selected_artist['name']}!🎉🎉🎉[green]")
     else:
       console.print(f"[red]❌ Insufficient funds to sign this artist. Balance is: {label.budget}[red]")
       return None
